@@ -1,0 +1,34 @@
+-- section --
+
+phase = fmod(days, M);
+if (phase < 0) phase += M;
+
+//how to calculate phase when going backwards in time
+
+-- section --
+
+#define EPOCH_DATE //December 21, 2010 was the date of both a winter equinox and a full moon
+#define END_OF_2010 //10.8 days
+#define INPUT_DATE //Jan1 of input year
+#define DAYS_FROM_EPOCH //diff between INPUT_DATE and EPOCH_DATE
+#define	SYNODIC_MONTH //29.5 days
+#define SOLAR_YEAR //365.25 days
+#define LUNAR_PHASE_REF //lunar phase on INPUT_DATE (days from last full moon)
+#define SOLAR_PHASE_REF //solar phase on INPUT_DATE (days from last winter equinox)
+#define FULLMOON_DAYS //int arr[13], diff between INPUT_DATE and each fullmoon that year
+
+-- section --
+The night sky is divided into 88 constellations. Taken all together, these constellations are called the celestial sphere. An observer can only see a portion of the celestial sphere depending on their location on earth and the time of year. By observing which constellations are visible, you can figure out where you are on Earth and what time of year it is. 
+
+At any time during a calendar year, you can draw a ray originating from the sun that passes through the earth. This ray will point to one of 12 constellations. The constellation that is pointed to can be used as a reference point for a solar calendar. 
+
+When standing at any point on earth in the middle of the night, it is impossible to see the sun, so the sun cannot be used as a reference point to draw the ray. However, on the night of a full moon, the sun, earth, and moon are all in a line. The location of the full moon in the night sky can be used as the "arrow" of the the ray.
+
+Using these reference points, the location of the full moon within one of the 12 constellations allows us to determine the position of the earth in a solar year. From this information, you can define the seasons or make a rudimentary calendar. To perfom such calculations, you need a start date, called an "epoch" that defines a known point in the calendar. This application uses December 21, 2010 as the epoch date because that is the date of both a winter solstice and a full moon. From there, using the periodicity of the moon rotating around the earth, and the earth revolving around the sun, the positions of the astral bodies can be calculated for any time.
+
+Our ancestors used the location of a full moon to know when to plant and harvest, but we just refer to these markers as seasons today. The constellation that is closest to the full moon's position gives the time of year. For example:
+
+	Winter: Gemini, Cancer, Leo
+	Spring: Virgo, Libra, Scorpio
+	Summer: Sagittarius, Capricorn, Aquarius
+	Autumn: Pisces, Aries, Taurus

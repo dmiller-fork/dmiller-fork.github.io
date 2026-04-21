@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>SVG Load Tree</title>
+</head>
+<body>
+  <h3>SVG Load Tree</h3>
+
+  <textarea id="input" rows="10" cols="60">test
+hello test</textarea>
+
+  <br><br>
+
+  <button id="runBtn">Load</button>
+
+  <pre id="output"></pre>
+
+  <script src="svg.js"></script>
+  <script>
+    let wasm;
+
+    svg({
+      print: function(text) {
+        const out = document.getElementById("output");
+        out.textContent += text + "\n";
+      }
+    }).then(function(Module) {
+      wasm = Module;
+    });
+let running = false;
+
+document.getElementById("runBtn").onclick = function() {
+  if (running) return;
+  running = true;
+
+  const input = document.getElementById("input").value;
+  const out = document.getElementById("output");
+  out.textContent = "";
+
+  try {
+    //wasm.ccall('clear', 'void', [], []);
+    wasm.ccall('process', 'void', ['string', 'number'], [input, input.length]);
+  } finally {
+    running = false;
+  }
+};
+  </script>
+</body>
+</html>
+

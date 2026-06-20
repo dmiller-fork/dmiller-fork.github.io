@@ -35,7 +35,7 @@ I’ve been thinking about this idea for a little bit where you build a blog, an
     }
     
     async function proxyFetch(url) { 
-      const res = await fetch('http://138.68.242.110:3000/proxy?url=' + encodeURIComponent(url));
+      const res = await fetch('https://fediproxy.com/proxy?url=' + encodeURIComponent(url));
       if (!res.ok) throw new Error('Fetch failed: ' + res.status);
       const data = await res.json();
       if (data.error) throw new Error('API error: ' + data.error);

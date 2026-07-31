@@ -1,0 +1,87 @@
+/* ---------- comments (fedicomments.js) ----------
+   Relies on the palette custom properties each app page already
+   defines on :root: --sky, --hill, --card-border, --ink-bg, --accent */
+
+.reply-link {
+  display: inline-block;
+  margin: 0.25rem 0 1.25rem;
+  padding: 0.4rem 1rem;
+  background: var(--sky);
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: bold;
+  transition: transform 0.15s ease;
+}
+.reply-link:hover { transform: translateY(-2px); }
+
+.comments-loading {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+.comment-error {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+.comment-error:empty { display: none; }
+
+.replies-label {
+  margin: 1.5rem 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.55;
+}
+
+.post {
+  padding: 1.1rem 0;
+  border-top: 1px solid var(--hill);
+}
+.post:first-child { border-top: none; padding-top: 0; }
+
+.post.reply {
+  margin-left: 1.25rem;
+  padding: 0.9rem 0 0.9rem 1rem;
+  border-top: none;
+  border-left: 3px solid var(--hill);
+}
+
+.post .header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.post .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--card-border);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.post .name { font-size: 0.9rem; font-weight: bold; }
+.post .handle { font-size: 0.8rem; opacity: 0.6; }
+
+.post .content {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  overflow-wrap: break-word;
+}
+.post .content p { margin: 0 0 0.6rem; }
+.post .content p:last-child { margin-bottom: 0; }
+.post .content a { color: var(--accent); }
+
+.post .meta {
+  margin-top: 0.6rem;
+  font-size: 0.75rem;
+  opacity: 0.55;
+}

@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Libsvg · My Village</title>
+<link rel="stylesheet" href="../../styles/fedicomments.css" />
+<style>
+
+  /* palette lifted straight from the village homepage, so this page
+     reads as one of its buildings rather than a separate site */
+  :root {
+    --sky: #eef4e6;
+    --hill: #b9cf8a;
+    --hill-dark: #9db86a;
+    --card-border: #8a9a5b;
+    --ink: #3a3226;
+    --ink-bg: #fffdf8;
+    --accent: #b5541f;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+    background: var(--sky);
+    color: var(--ink);
+  }
+
+  .back {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    z-index: 10;
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    background: var(--ink-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 999px;
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: bold;
+  }
+
+  /* ---------- hero ---------- */
+
+  .hero {
+    position: relative;
+    padding-top: 3rem;
+  }
+
+  .hero-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 1.5rem 3.5rem;
+    text-align: center;
+  }
+
+  .icon-circle {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 1rem;
+    background: var(--ink-bg);
+    border: 2px solid var(--card-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.08);
+  }
+
+  .hero h1 { margin: 0 0 0.4rem; }
+  .hero p.tagline { margin: 0; opacity: 0.7; }
+
+  .hills-divider svg {
+    display: block;
+    width: 100%;
+    height: 70px;
+  }
+  .hills-divider .hill { fill: var(--hill); }
+  .hills-divider .hill.back { fill: var(--hill-dark); opacity: 0.6; }
+
+  /* ---------- content ---------- */
+
+  main {
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+    background: var(--hill);
+    margin-top: -2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+  }
+
+  main > * + * { margin-top: 1.5rem; }
+
+  .card {
+    width: 100%;
+    max-width: 700px;
+    background: var(--ink-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.08);
+  }
+
+  .card:first-of-type { margin-top: -3rem; position: relative; }
+
+  .card h2 { margin-top: 0; }
+  .card p { line-height: 1.6; }
+  .card p:last-child { margin-bottom: 0; }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .field label {
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.6;
+  }
+
+  textarea {
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 0.85rem;
+    padding: 0.75rem;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    background: var(--sky);
+    color: var(--ink);
+    resize: vertical;
+    width: 100%;
+  }
+
+  .controls {
+    margin-top: 1rem;
+  }
+
+  .controls button {
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--ink-bg);
+    background: var(--accent);
+    border: none;
+    border-radius: 999px;
+    padding: 0.6rem 1.4rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
+  }
+
+  .controls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.15);
+  }
+
+  #output {
+    margin-top: 1.25rem;
+    margin-bottom: 0;
+    background: var(--sky);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1rem;
+    min-height: 1.5rem;
+    overflow-x: auto;
+    font-size: 0.9rem;
+  }
+
+</style>
+</head>
+<body>
+
+<a class="back" href="../../index.html">← Back to Village</a>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="icon-circle">
+      <svg width="40" height="40" viewBox="0 0 36 36" fill="none">
+        <path d="M18 4 24 14h-4l6 8h-5l6 10H11l6-10h-5l6-8h-4Z" fill="var(--accent)"/>
+        <rect x="16" y="30" width="4" height="4" fill="var(--accent)"/>
+      </svg>
+    </div>
+    <h1>Libsvg</h1>
+    <p class="tagline">Load and inspect an SVG's element tree, client-side, powered by wasm</p>
+  </div>
+
+  <div class="hills-divider">
+    <svg viewBox="0 0 1000 100" preserveAspectRatio="none">
+      <path class="hill back" d="M0,50 C180,90 340,20 520,50 C700,80 860,20 1000,45 V100 H0 Z"/>
+      <path class="hill" d="M0,65 C200,95 380,55 560,70 C740,85 880,55 1000,65 V100 H0 Z"/>
+    </svg>
+  </div>
+</div>
+
+<main>
+  <section class="card">
+    <h2>Load an SVG tree</h2>
+    <div class="field">
+      <label for="input">SVG</label>
+      <textarea id="input" rows="10">test
+hello test</textarea>
+    </div>
+
+    <div class="controls">
+      <button id="runBtn">Load</button>
+    </div>
+
+    <pre id="output"></pre>
+  </section>
+
+  <section class="card">
+    <h2>Comments</h2>
+    <a id="reply" class="reply-link" href="https://theforkiverse.com/@dmillerfork/000000000000000000" target="_blank" rel="noopener">Reply on the Fediverse →</a>
+    <div id="comments">
+      <p class="comments-loading">Loading comments…</p>
+    </div>
+    <p id="error" class="comment-error"></p>
+  </section>
+</main>
+
+<script>
+        const id = "116443727844687297"; 
+	document.getElementById("reply").href =`https://theforkiverse.com/@dmillerfork/${id}`
+</script>
+<script src="../../scripts/fedicomments.js"></script>
+
+<script src="svg.js"></script>
+<script>
+  let wasm;
+
+  svg({
+    print: function(text) {
+      const out = document.getElementById("output");
+      out.textContent += text + "\n";
+    }
+  }).then(function(Module) {
+    wasm = Module;
+  });
+
+  let running = false;
+
+  document.getElementById("runBtn").onclick = function() {
+    if (running) return;
+    running = true;
+
+    const input = document.getElementById("input").value;
+    const out = document.getElementById("output");
+    out.textContent = "";
+
+    try {
+      //wasm.ccall('clear', 'void', [], []);
+      wasm.ccall('process', 'void', ['string', 'number'], [input, input.length]);
+    } finally {
+      running = false;
+    }
+  };
+</script>
+</body>
+</html>

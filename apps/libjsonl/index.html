@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Libjsonl · My Village</title>
+<link rel="stylesheet" href="../../styles/fedicomments.css" />
+<style>
+
+  /* palette lifted straight from the village homepage, so this page
+     reads as one of its buildings rather than a separate site */
+  :root {
+    --sky: #eef4e6;
+    --hill: #b9cf8a;
+    --hill-dark: #9db86a;
+    --card-border: #8a9a5b;
+    --ink: #3a3226;
+    --ink-bg: #fffdf8;
+    --accent: #b5541f;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+    background: var(--sky);
+    color: var(--ink);
+  }
+
+  .back {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    z-index: 10;
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    background: var(--ink-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 999px;
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: bold;
+  }
+
+  /* ---------- hero ---------- */
+
+  .hero {
+    position: relative;
+    padding-top: 3rem;
+  }
+
+  .hero-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 1.5rem 3.5rem;
+    text-align: center;
+  }
+
+  .icon-circle {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 1rem;
+    background: var(--ink-bg);
+    border: 2px solid var(--card-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.08);
+  }
+
+  .hero h1 { margin: 0 0 0.4rem; }
+  .hero p.tagline { margin: 0; opacity: 0.7; }
+
+  .hills-divider svg {
+    display: block;
+    width: 100%;
+    height: 70px;
+  }
+  .hills-divider .hill { fill: var(--hill); }
+  .hills-divider .hill.back { fill: var(--hill-dark); opacity: 0.6; }
+
+  /* ---------- content ---------- */
+
+  main {
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+    background: var(--hill);
+    margin-top: -2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+  }
+
+  main > * + * { margin-top: 1.5rem; }
+
+  .card {
+    width: 100%;
+    max-width: 700px;
+    background: var(--ink-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.08);
+  }
+
+  .card:first-of-type { margin-top: -3rem; position: relative; }
+
+  .card h2 { margin-top: 0; }
+  .card p { line-height: 1.6; }
+  .card p:last-child { margin-bottom: 0; }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .field label {
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.6;
+  }
+
+  .controls select,
+  .controls input[type="text"] {
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    background: var(--sky);
+    color: var(--ink);
+  }
+
+  .controls input[type="text"] { width: 8rem; }
+
+  .controls button {
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--ink-bg);
+    background: var(--accent);
+    border: none;
+    border-radius: 999px;
+    padding: 0.6rem 1.4rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
+    align-self: flex-end;
+  }
+
+  .controls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.15);
+  }
+
+  .textareas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.25rem;
+  }
+
+  .textareas .field { flex: 1 1 260px; }
+
+  textarea {
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 0.85rem;
+    padding: 0.75rem;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    background: var(--sky);
+    color: var(--ink);
+    resize: vertical;
+    width: 100%;
+  }
+
+  #output {
+    margin-top: 1.25rem;
+    margin-bottom: 0;
+    background: var(--sky);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1rem;
+    min-height: 1.5rem;
+    overflow-x: auto;
+    font-size: 0.9rem;
+  }
+
+</style>
+</head>
+<body>
+
+<a class="back" href="../../index.html">← Back to Village</a>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="icon-circle">
+      <svg width="40" height="40" viewBox="0 0 36 36" fill="none">
+        <path d="M13 4c-3 0-5 2-5 5v6c0 2-1 3-3 3 2 0 3 1 3 3v6c0 3 2 5 5 5" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <path d="M23 4c3 0 5 2 5 5v6c0 2 1 3 3 3-2 0-3 1-3 3v6c0 3-2 5-5 5" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+    <h1>Libjsonl</h1>
+    <p class="tagline">Sort, sum, filter, and join JSONL records — all client-side, powered by wasm</p>
+  </div>
+
+  <div class="hills-divider">
+    <svg viewBox="0 0 1000 100" preserveAspectRatio="none">
+      <path class="hill back" d="M0,50 C180,90 340,20 520,50 C700,80 860,20 1000,45 V100 H0 Z"/>
+      <path class="hill" d="M0,65 C200,95 380,55 560,70 C740,85 880,55 1000,65 V100 H0 Z"/>
+    </svg>
+  </div>
+</div>
+
+<main>
+  <section class="card">
+    <h2>Run a transform</h2>
+    <div class="controls">
+      <div class="field">
+        <label for="mode">Mode</label>
+        <select id="mode">
+          <option value="sort">Sort</option>
+          <option value="sum">Sum</option>
+          <option value="filter">Filter</option>
+          <option value="join">Join</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="key">Key</label>
+        <input id="key" type="text" value="id">
+      </div>
+
+      <span id="valBox" class="field" style="display:none;">
+        <label for="val">Val</label>
+        <input id="val" type="text" value="2">
+      </span>
+
+      <button id="runBtn">Run</button>
+    </div>
+
+    <div class="textareas">
+      <div class="field">
+        <label for="input">Input</label>
+        <textarea id="input" rows="10">{id:"1", name:"Alice"}
+{id:"3", name:"carl"}
+{id:"2", name:"bob"}</textarea>
+      </div>
+
+      <span id="joinBox" class="field" style="display:none;">
+        <label for="input2">Join against</label>
+        <textarea id="input2" rows="10">{id:"1", name:"Alice"}
+{id:"3", name:"carl"}
+{id:"2", name:"bob"}</textarea>
+      </span>
+    </div>
+
+    <pre id="output"></pre>
+  </section>
+
+  <section class="card">
+    <h2>Comments</h2>
+    <a id="reply" class="reply-link" href="https://theforkiverse.com/@dmillerfork/000000000000000000" target="_blank" rel="noopener">Reply on the Fediverse →</a>
+    <div id="comments">
+      <p class="comments-loading">Loading comments…</p>
+    </div>
+    <p id="error" class="comment-error"></p>
+  </section>
+</main>
+
+<script>
+        const id = "116189125017646816"; 
+	document.getElementById("reply").href =`https://theforkiverse.com/@dmillerfork/${id}`
+</script>
+<script src="../../scripts/fedicomments.js"></script>
+
+<script>
+const mode = document.getElementById("mode");
+const valBox = document.getElementById("valBox");
+const joinBox = document.getElementById("joinBox");
+
+mode.addEventListener("change", function () {
+	valBox.style.display = (mode.value === "filter") ? "inline-flex" : "none";
+	joinBox.style.display = (mode.value === "join") ? "inline-flex" : "none";
+});
+</script>
+
+<script src="jsonl.js"></script>
+
+<script>
+let wasm;
+
+jsonl({
+  print: function(text) {
+    const out = document.getElementById("output");
+    out.textContent += text + "\n";
+  }
+}).then(function(Module) {
+  wasm = Module;
+});
+
+document.getElementById("runBtn").onclick = function() {
+  const input = document.getElementById("input").value;
+  const input2 = document.getElementById("input2").value;
+  const key = document.getElementById("key").value;
+  const mode = document.getElementById("mode").value;
+	const val = document.getElementById("val").value;
+
+  const out = document.getElementById("output");
+  out.textContent = "";
+
+  if (mode === "sort") {
+    wasm.ccall(
+      'jsonl_wasm_sort',
+      'void',
+      ['string','number','string'],
+      [input, input.length, key]
+    );
+  } else if (mode === "sum") {
+    wasm.ccall(
+      'jsonl_wasm_sum',
+      'void',
+      ['string','number','string'],
+      [input, input.length, key]
+    );
+  } else if (mode === "filter") {
+    wasm.ccall(
+      'jsonl_wasm_filter',
+      'int',
+      ['string','number','string', 'string'],
+      [input, input.length, key, val]
+    );
+  } else if (mode === "join") {
+    wasm.ccall(
+      'jsonl_wasm_join',
+      'int',
+      ['string', 'string', 'number', 'number', 'string'],
+      [input, input2, input.length, input2.length, key]
+    );
+  }
+};
+</script>
+
+</body>
+</html>

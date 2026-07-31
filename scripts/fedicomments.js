@@ -1,31 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Fediblog</title>
-<style>
-  p {
-    max-width: 80ch;
-  }
-</style>
-</head>
-<body>
-<header>
- <a href="../../">← Back to Portfolio</a>
-</header>
-<h2>Fediblog</h2>
-	<section>
-<p>
-I’ve been thinking about this idea for a little bit where you build a blog, and then let the fediverse act as the comment section for each of your blog posts. I’m tentatively calling it the fediblog. The basic idea requires two parts: a frontend and a backend. The backend is basically just a proxy server that will harvest posts from the fediverse and serve them to your website when requested. The frontend loads your actual content, and then makes calls to the backend to request the relevant posts from the fediverse. I’m sure I’m missing a lot of the nuances of how this could be better, but I built a working prototype, and I’d like to know what you all think.
-</p>
-<p>I currently have the app set to render the responses to this article, but you can scrape and render any post if you understand how to use the proxy sever.</p>
-</section>
-<section>
-<h3>comments</h3>
-<a href="https://theforkiverse.com/@dmillerfork/116803171941179724">reply here</a>
-<hr />
-<div id="output"></div>
-<script>
     function parseUrl(url) {
       const u = new URL(url);
       const instance = u.hostname;
@@ -62,7 +34,6 @@ I’ve been thinking about this idea for a little bit where you build a blog, an
 document.addEventListener("DOMContentLoaded", async function () {
     try {
         const instance = "theforkiverse.com";
-        const id = "116803171941179724";
         const base = `https://${instance}/api/v1/statuses/${id}`;
 
         const [post, context] = await Promise.all([
@@ -75,12 +46,9 @@ document.addEventListener("DOMContentLoaded", async function () {
           ? `<div class="replies-label">${replies.length} repl${replies.length === 1 ? 'y' : 'ies'}</div>` + replies.map(r =>           renderPost(r, true)).join('')
           : '<p style="color:#999;font-size:13px">No replies yet.</p>';
 
-        document.getElementById('output').innerHTML = renderPost(post) + repliesHtml;
+        document.getElementById('comments').innerHTML = renderPost(post) + repliesHtml;
       } catch (err) {
         document.getElementById('error').textContent = err.message;
-        document.getElementById('output').innerHTML = '';
+        document.getElementById('comments').innerHTML = '';
       }
     });
-</script>
-</body>
-</html>

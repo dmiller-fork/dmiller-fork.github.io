@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Full Moon Constellations · My Village</title>
+<link rel="stylesheet" href="../../styles/fedicomments.css" />
+<style>
+
+  /* palette lifted straight from the village homepage, so this page
+     reads as one of its buildings rather than a separate site */
+  :root {
+    --sky: #eef4e6;
+    --hill: #b9cf8a;
+    --hill-dark: #9db86a;
+    --card-border: #8a9a5b;
+    --ink: #3a3226;
+    --ink-bg: #fffdf8;
+    --accent: #b5541f;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+    background: var(--sky);
+    color: var(--ink);
+  }
+
+  .back {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    z-index: 10;
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    background: var(--ink-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 999px;
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: bold;
+  }
+
+  /* ---------- hero: sky up top, hill wave straddled by a moon, same
+     trick as straddle.html but using the homepage's hill/sky colors ---------- */
+
+  .hero {
+    position: relative;
+    padding-top: 3rem;
+  }
+
+  .hero-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 1.5rem 3.5rem;
+    text-align: center;
+  }
+
+  .moon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 1rem;
+    background: var(--ink-bg);
+    border: 2px solid var(--card-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.08);
+  }
+
+  .hero h1 { margin: 0 0 0.4rem; }
+  .hero p.tagline { margin: 0; opacity: 0.7; }
+
+  .hills-divider svg {
+    display: block;
+    width: 100%;
+    height: 70px;
+  }
+  .hills-divider .hill { fill: var(--hill); }
+  .hills-divider .hill.back { fill: var(--hill-dark); opacity: 0.6; }
+
+  /* ---------- content ---------- */
+
+  main {
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+    background: var(--hill);
+    margin-top: -2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+  }
+
+  main > * + * { margin-top: 1.5rem; }
+
+  .card {
+    width: 100%;
+    max-width: 700px;
+    background: var(--ink-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.08);
+  }
+
+  .card:first-of-type { margin-top: -3rem; position: relative; }
+
+  .card h2 { margin-top: 0; }
+  .card p { line-height: 1.6; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { line-height: 1.8; margin-bottom: 0; }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .controls input[type="number"] {
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    background: var(--sky);
+    color: var(--ink);
+    width: 8rem;
+  }
+
+  .controls button {
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--ink-bg);
+    background: var(--accent);
+    border: none;
+    border-radius: 999px;
+    padding: 0.6rem 1.4rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
+  }
+
+  .controls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.15);
+  }
+
+  #output {
+    margin-top: 1.25rem;
+    margin-bottom: 0;
+    background: var(--sky);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1rem;
+    min-height: 1.5rem;
+    overflow-x: auto;
+    font-size: 0.9rem;
+  }
+
+
+</style>
+</head>
+<body>
+
+<a class="back" href="../../index.html">← Back to Village</a>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="moon">
+      <svg width="40" height="40" viewBox="0 0 36 36" fill="none">
+        <path d="M23 6a13 13 0 1 0 7 23.9A11 11 0 0 1 23 6Z" fill="var(--accent)"/>
+      </svg>
+    </div>
+    <h1>Full Moon Constellations</h1>
+    <p class="tagline">Find the full moons and their constellations for any year</p>
+  </div>
+
+  <div class="hills-divider">
+    <svg viewBox="0 0 1000 100" preserveAspectRatio="none">
+      <path class="hill back" d="M0,50 C180,90 340,20 520,50 C700,80 860,20 1000,45 V100 H0 Z"/>
+      <path class="hill" d="M0,65 C200,95 380,55 560,70 C740,85 880,55 1000,65 V100 H0 Z"/>
+    </svg>
+  </div>
+</div>
+
+<main>
+  <section class="card">
+    <p>
+      The night sky is divided into 88 constellations. Taken all together, these constellations are called the
+      celestial sphere. An observer can only see a portion of the celestial sphere depending on their location on
+      Earth and the time of year. By observing which constellations are visible, you can figure out where you are
+      on Earth and what time of year it is.
+    </p>
+    <p>
+      On the night of a full moon, you can draw a ray originating from the sun that passes through the earth, and
+      continues through the moon. This ray will point to one of 12 constellations. This constellation gives an
+      astrological "month" of the year.
+    </p>
+    <p>
+      Our ancestors used the location of a full moon to know when to plant and harvest, but today, we just refer
+      to these markers as seasons. The constellation that is closest to the full moon's position gives the season.
+      Here is a chart for reference:
+    </p>
+    <ul>
+      <li>Winter: Gemini, Cancer, Leo</li>
+      <li>Spring: Virgo, Libra, Scorpio</li>
+      <li>Summer: Sagittarius, Capricorn, Aquarius</li>
+      <li>Autumn: Pisces, Aries, Taurus</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Get the full moon dates and locations for a year</h2>
+    <div class="controls">
+      <input id="yearInput" type="number" min="0" max="9999" value="2026">
+      <button id="runBtn">Compute</button>
+    </div>
+    <pre id="output"></pre>
+  </section>
+  <section class="card">
+    <h2>Comments</h2>
+    <a id="reply" class="reply-link" href="https://theforkiverse.com/@dmillerfork/116780429376062673" target="_blank" rel="noopener">Reply on the Fediverse →</a>
+    <div id="comments">
+      <p class="comments-loading">Loading comments…</p>
+    </div>
+    <p id="error" class="comment-error"></p>
+  </section>
+</main>
+
+<script src="astro.js"></script>
+<script>
+  let wasm;
+
+  Astro({
+    print: function(text) {
+      const out = document.getElementById("output");
+      out.textContent += text + "\n";
+    }
+  }).then(function(Module) {
+    wasm = Module;
+  });
+
+  document.getElementById("runBtn").onclick = function() {
+    const year = parseInt(document.getElementById("yearInput").value);
+    const out = document.getElementById("output");
+    out.textContent = "";
+    wasm.ccall('fullmoons_for_year', 'number', ['number'], [year]);
+  };
+</script>
+<script>
+        const id = "116168982888956265";
+	document.getElementById("reply").href =`https://theforkiverse.com/@dmillerfork/${id}`
+</script>
+<script src="../../scripts/fedicomments.js"></script>
+	
+</body>
+</html>

@@ -1,115 +1,399 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Frontend Portfolio</title>
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      margin: 0;
-      padding: 2rem;
-      background: #f5f5f5;
-      color: #222;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>My Village</title>
+<style>
+
+  /* ------------------------------------------------------------------
+     Everything below is authored in one fixed design space: 1000x700
+     units. The background hills and the trail are drawn in an
+     <svg viewBox="0 0 1000 700">; buildings are plain absolutely
+     positioned elements placed at left:(x/1000)%, top:(y/700)%. Same
+     space, so they always line up, at any screen size.
+
+     There is no generator here. To add a building: copy a .building
+     block below, pick x/y by eye, then extend the #trail path's `d`
+     with one more "C control1 control2 destination" segment reaching
+     it. Refresh, nudge numbers, repeat until it looks right.
+
+     Below ~700px wide the map is abandoned for a plain stacked list --
+     hand-placed x/y positions don't mean anything on a phone screen.
+     ------------------------------------------------------------------ */
+
+  :root {
+    --sky: #eef4e6;
+    --hill: #b9cf8a;
+    --hill-dark: #9db86a;
+    --path: #c9b896;
+    --card-bg: #b9cf8a;
+    --card-border: #8a9a5b;
+    --ink: #3a3226;
+    --ink-bg: #fffdf8;
+    --accent: #b5541f;
+  }
+
+  html {
+   	scroll-behavior: smooth;
+  }
+  /* the filter radios are never seen -- clicking a building (a <label
+     for="filter-...">) toggles them, and CSS below shows/hides #apps
+     items based on which one is :checked. Hidden this way (not
+     display:none) so they stay keyboard-focusable/tabbable. */
+  .filter-input {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+    background: var(--sky);
+    color: var(--ink);
+  }
+
+  header { text-align: center; padding: 2rem 1rem 0.5rem; }
+  header h1 { margin: 0 0 0.25rem; }
+  header p { margin: 0; opacity: 0.7; }
+
+  /* ---------- the map ---------- */
+
+  #map {
+    position: relative;
+    width: min(1000px, 95vw);
+    aspect-ratio: 10 / 7;   /* matches the 1000x700 design space */
+    margin: 2rem auto;
+    overflow: hidden;
+    border-radius: 16px;
+  }
+
+  #map svg.layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* background terrain -- same filled-bezier-wave trick as a trail,
+     just used flat across the width for a horizon instead */
+  .hill { fill: var(--hill); }
+  .hill.back { fill: var(--hill-dark); opacity: 0.6; }
+
+  /* the road -- one continuous hand-drawn path, so the line 
+     never breaks no matter how many buildings sit along it */
+  #trail {
+    fill: none;
+    stroke: var(--path);
+    stroke-width: 14;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    /*stroke-dasharray: 2 22;*/
+  }
+
+  .building {
+    position: absolute;
+    transform: translate(-50%, -50%); /* left/top mark the building's center */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    width: 110px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .building .icon {
+    width: 64px;
+    height: 64px;
+    background: var(--card-bg);
+    border: 2px solid var(--card-border);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+
+  .building .icon img { width: 44px; height: 44px; object-fit: contain; }
+
+  .building:hover .icon {
+    transform: translateY(-4px);
+    box-shadow: 0 7px 0 rgba(0,0,0,0.1);
+  }
+
+  .building .label {
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-align: center;
+    background: var(--ink-bg);
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--card-border);
+  }
+
+  /* ---------- MOBILE: give up on the map, use a list ---------- */
+
+  @media (max-width: 700px) {
+    #map {
+      aspect-ratio: unset;
+      overflow: visible;
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      width: 90vw;
     }
-    h1 { margin-bottom: 0.5rem; }
-    .featured {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 8px;
-      margin-bottom: 2rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+
+    #map svg.layer { display: none; }
+
+    .building {
+      position: static;
+      transform: none;
+      width: 100%;
+      flex-direction: row;
+      justify-content: flex-start;
       gap: 1rem;
+      padding: 0.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
     }
-    .card {
-      background: white;
-      padding: 1rem;
-      border-radius: 8px;
-      text-decoration: none;
-      color: inherit;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-      transition: transform 0.1s ease;
-    }
-    .card:hover {
-      transform: translateY(-2px);
-    }
-    .card h3 {
-      margin-top: 0;
-      margin-bottom: 0.5rem;
-    }
-    .muted {
-      color: #666;
-      font-size: 0.9rem;
-    }
-  </style>
+
+    .building .label { border: none; background: none; padding: 0; }
+  }
+
+  /* ---------- the apps grid (phone home-screen style) ---------- */
+  /* Every program/essay is a .item with a data-category matching one of
+     the filter ids below. #filter-all is checked by default, so nothing
+     is hidden and everything shows. Checking a building's radio hides
+     every .item whose data-category doesn't match it. To add a 5th
+     building/category: add its radio+label, then copy one "checked ~
+     .item:not(...)" rule and one highlight rule for it. */
+
+  #apps { max-width: 900px; margin: 0 auto 4rem; padding: 0 1rem; }
+  #apps h2 { text-align: center; margin-bottom: 0.5rem; }
+
+  .filter-all {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 2rem;
+    padding: 0.3rem 1rem;
+    background: var(--ink-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 1.5rem 1rem;
+  }
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+  }
+
+  .item .tile {
+    width: 64px;
+    height: 64px;
+    background: var(--ink-bg);
+    border: 2px solid var(--card-border);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.08);
+    transition: transform 0.15s ease;
+  }
+
+  .item:hover .tile { transform: translateY(-4px); }
+
+  .item .tile img { width: 36px; height: 36px; object-fit: contain; }
+
+  .item .name { font-size: 0.8rem; }
+
+  /* ---- filtering: hide items that don't match the checked building ---- */
+  #filter-stonehenge:checked ~ #apps .item:not([data-category="stonehenge"]) { display: none; }
+  #filter-tree:checked       ~ #apps .item:not([data-category="tree"])       { display: none; }
+  #filter-watermill:checked  ~ #apps .item:not([data-category="watermill"])  { display: none; }
+  #filter-tower:checked      ~ #apps .item:not([data-category="tower"])      { display: none; }
+
+  /* ---- highlight whichever building is the active filter ---- */
+  #filter-stonehenge:checked ~ #map label[for="filter-stonehenge"] .icon,
+  #filter-tree:checked       ~ #map label[for="filter-tree"]       .icon,
+  #filter-watermill:checked  ~ #map label[for="filter-watermill"]  .icon,
+  #filter-tower:checked      ~ #map label[for="filter-tower"]      .icon {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(181, 84, 31, 0.25);
+  }
+
+</style>
 </head>
 <body>
 
-  <h1>Projects</h1>
-  <p class="muted">Collection of small programs.</p>
+<!-- one radio per building, plus "all" -- these drive the filtering
+     below via CSS, nothing else references them -->
+<input class="filter-input" type="radio" name="filter" id="filter-all" checked>
+<input class="filter-input" type="radio" name="filter" id="filter-stonehenge">
+<input class="filter-input" type="radio" name="filter" id="filter-tree">
+<input class="filter-input" type="radio" name="filter" id="filter-watermill">
+<input class="filter-input" type="radio" name="filter" id="filter-tower">
 
-  <!-- Featured Project -->
-  <section class="featured">
-    <h2>Featured Project</h2>
-    <h3><a href="programs/libmd/">libmd</a></h3>
-    <p class="muted">translate markdown to html</p>
-  </section>
+<header>
+  <h1>Welcome to the Village</h1>
+  <p>Click a building to filter the programs below</p>
+</header>
 
-  <!-- All Projects -->
-  <section>
-    <h2>All Projects</h2>
-    <div class="grid">
+<div id="map">
 
-      <a class="card" href="programs/libsvg/">
-        <h3>libsvg</h3>
-        <p class="muted">small library to create and print a tree from constituent parts</p>
-      </a>
+  <!-- background hills: the exact "filled cubic-bezier wave" pattern you
+       referenced, just laid flat across the width for a horizon -->
+  <svg class="layer" viewBox="0 0 1000 700" preserveAspectRatio="none">
+    <path class="hill back"
+          d="M0,260 C180,320 340,180 520,240 C700,300 860,180 1000,230 V700 H0 Z"/>
+    <path class="hill"
+          d="M0,340 C200,400 380,300 560,350 C740,400 880,300 1000,340 V700 H0 Z"/>
+  </svg>
 
-      <a class="card" href="programs/libjsonl/">
-        <h3>libjsonl</h3>
-        <p class="muted">small library to edit jsonl files using database like operations</p>
-      </a>
+  <!-- the road: one hand-drawn path, curving from building to building.
+       Each "C c1x,c1y c2x,c2y x,y" segment is one hop -- c1/c2 are the
+       bend controls, x,y is where it lands (the next building). -->
+  <svg class="layer" viewBox="0 0 1000 700" preserveAspectRatio="none">
+    <path id="trail" d="
+      M180,340
+      C160,260 140,340 420,460
+      C520,380 680,280 830,260
+      C760,420 680,540 600,620
+    "/>
+  </svg>
 
-      <a class="card" href="programs/libastro/">
-        <h3>libastro</h3>
-        <p class="muted">solar lunar calendar that tracks full moons using astrological constellations as a reference background</p>
-      </a>
+  <!-- buildings: hand-placed. left/top = (x/1000)%, (y/700)% using the
+       same x,y the trail above passes through. Icons are your own PNGs,
+       dropped in icons/ with matching filenames. -->
 
-		<a class="card" href="programs/fediblog/">
-        <h3>fediblog</h3>
-        <p class="muted">blog setup that uses the fediverse for comments</p>
-      </a>
+  <label class="building" for="filter-stonehenge" style="left:18%; top:47%;">
+    <span class="icon"><img src="icons/stonehenge.png" alt=""></span>
+    <span class="label">Stonehenge</span>
+  </label>
 
+  <label class="building" for="filter-tree" style="left:42%; top:66%;">
+    <span class="icon"><img src="icons/tree.png" alt=""></span>
+    <span class="label">Tree</span>
+  </label>
 
-	   <a class="card" href="programs/libmd/">
-        <h3>libmd</h3>
-        <p class="muted">small library to translate markdown to html</p>
-      </a>
+  <label class="building" for="filter-watermill" style="left:83%; top:37%;">
+    <span class="icon"><img src="icons/watermill.jpg" alt=""></span>
+    <span class="label">Watermill</span>
+  </label>
 
-    </div>
-  </section>
+  <label class="building" for="filter-tower" style="left:60%; top:89%;">
+    <span class="icon"><img src="icons/tower.gif" alt=""></span>
+    <span class="label">Tower</span>
+  </label>
 
+</div>
 
-  <section>
-    <h2>Essays</h2>
+<!-- everything below is one flat list of programs/essays. Each .item's
+     data-category ties it to a building above -- that's the only
+     connection between the two; add/remove items freely. -->
+<section id="apps">
+  <h2>Programs &amp; Essays</h2>
+  <label class="filter-all" for="filter-all">Show All</label>
 
-    <div class="grid">
+  <div class="grid">
 
-      <a class="card" href="essays/sisyphus/">
-        <h3>The Myth of Sisyphus</h3>
-        <p class="muted">The hilltop problem, and what it all means.</p>
-      </a>
-
-	<a class="card" href="essays/frankl/">
-        <h3>Man's Search For Meaning</h3>
-        <p class="muted">How Philosophy can give purpose/meaning to one's life, even in a concentration camp.</p>
+    <a class="item" data-category="stonehenge" href="apps/libastro/index.html">
+      <span class="tile">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M23 6a13 13 0 1 0 7 23.9A11 11 0 0 1 23 6Z" fill="var(--accent)"/>
+        </svg>
+      </span>
+      <span class="name">Libastro</span>
     </a>
 
-    </div>
-  </section>
+    <a class="item" data-category="stonehenge" href="apps/fediblog/index.html">
+      <span class="tile">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M4 8a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4H14l-7 6v-6H8a4 4 0 0 1-4-4V8Z" fill="var(--accent)"/>
+        </svg>
+      </span>
+      <span class="name">Fediblog</span>
+    </a>
+
+    <a class="item" data-category="tree" href="apps/libjsonl/index.html">
+      <span class="tile">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M13 4c-3 0-5 2-5 5v6c0 2-1 3-3 3 2 0 3 1 3 3v6c0 3 2 5 5 5" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M23 4c3 0 5 2 5 5v6c0 2 1 3 3 3-2 0-3 1-3 3v6c0 3-2 5-5 5" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        </svg>
+      </span>
+      <span class="name">Libjsonl</span>
+    </a>
+
+    <a class="item" data-category="tree" href="apps/libmd/index.html">
+      <span class="tile">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M8 3h14l8 8v20a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="var(--accent)"/>
+          <path d="M22 3v6a2 2 0 0 0 2 2h6" fill="var(--ink-bg)"/>
+        </svg>
+      </span>
+      <span class="name">Libmd</span>
+    </a>
+
+    <a class="item" data-category="watermill" href="apps/libsvg/index.html">
+      <span class="tile">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M18 4 24 14h-4l6 8h-5l6 10H11l6-10h-5l6-8h-4Z" fill="var(--accent)"/>
+          <rect x="16" y="30" width="4" height="4" fill="var(--accent)"/>
+        </svg>
+      </span>
+      <span class="name">Libsvg</span>
+    </a>
+
+    <a class="item" data-category="watermill" href="#">
+      <span class="tile"><img src="icons/apps/program-6.png" alt=""></span>
+      <span class="name">Project Six</span>
+    </a>
+
+    <a class="item" data-category="tower" href="#">
+      <span class="tile"><img src="icons/apps/program-7.png" alt=""></span>
+      <span class="name">Project Seven</span>
+    </a>
+
+    <a class="item" data-category="tower" href="#">
+      <span class="tile"><img src="icons/apps/program-8.png" alt=""></span>
+      <span class="name">Project Eight</span>
+    </a>
+
+  </div>
+</section>
+<script>
+document.querySelectorAll(".building").forEach(label => {
+    label.onclick = () => {
+	console.log("hello world");
+	document.getElementById("apps").scrollIntoView();
+    }
+});
+</script>
 </body>
 </html>

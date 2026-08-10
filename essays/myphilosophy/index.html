@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>My Philosophy · My Village</title>
+<link rel="stylesheet" href="../../styles/fedicomments.css" />
+<style>
+
+  /* palette lifted straight from the village homepage, so this page
+     reads as one of its buildings rather than a separate site */
+  :root {
+    --sky: #eef4e6;
+    --hill: #b9cf8a;
+    --hill-dark: #9db86a;
+    --card-border: #8a9a5b;
+    --ink: #3a3226;
+    --ink-bg: #fffdf8;
+    --accent: #b5541f;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+    background: var(--sky);
+    color: var(--ink);
+  }
+
+  .back {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    z-index: 10;
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    background: var(--ink-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 999px;
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: bold;
+  }
+
+  /* ---------- hero ---------- */
+
+  .hero {
+    position: relative;
+    padding-top: 3rem;
+  }
+
+  .hero-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 1.5rem 3.5rem;
+    text-align: center;
+  }
+
+  .icon-circle {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 1rem;
+    background: var(--ink-bg);
+    border: 2px solid var(--card-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+
+  /* sisyphus.jpg has a lot of dead-white margin on its right side --
+     crop in on the figure instead of shrinking the whole frame down */
+  .icon-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 45% 40%;
+  }
+
+  .hero h1 { margin: 0 0 0.4rem; }
+  .hero p.tagline { margin: 0; opacity: 0.7; }
+
+  .hills-divider svg {
+    display: block;
+    width: 100%;
+    height: 70px;
+  }
+  .hills-divider .hill { fill: var(--hill); }
+  .hills-divider .hill.back { fill: var(--hill-dark); opacity: 0.6; }
+
+  /* ---------- content ---------- */
+
+  main {
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+    background: var(--hill);
+    margin-top: -2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+  }
+
+  main > * + * { margin-top: 1.5rem; }
+
+  .card {
+    width: 100%;
+    max-width: 700px;
+    background: var(--ink-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.08);
+  }
+
+  .card h2 { margin-top: 0; }
+  .card p { line-height: 1.6; max-width: 80ch; }
+  .card p:last-child { margin-bottom: 0; }
+
+  .card.figure { margin-top: -3rem; position: relative; padding: 0; overflow: hidden; }
+  .card.figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 340px;
+    object-fit: cover;
+    object-position: top;
+  }
+  .card.figure figcaption {
+    padding: 0.6rem 1.75rem 0.9rem;
+    font-size: 0.85rem;
+    opacity: 0.7;
+    text-align: center;
+  }
+
+</style>
+</head>
+<body>
+
+<a class="back" href="../../index.html">← Back to Village</a>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="icon-circle">
+      <img src="../../icons/sisyphus.jpg" alt="" />
+    </div>
+    <h1>My Philosophy</h1>
+    <p class="tagline">On existentialism, absurdism, and how to be optimistic</p>
+  </div>
+
+  <div class="hills-divider">
+    <svg viewBox="0 0 1000 100" preserveAspectRatio="none">
+      <path class="hill back" d="M0,50 C180,90 340,20 520,50 C700,80 860,20 1000,45 V100 H0 Z"/>
+      <path class="hill" d="M0,65 C200,95 380,55 560,70 C740,85 880,55 1000,65 V100 H0 Z"/>
+    </svg>
+  </div>
+</div>
+
+<main>
+<!--
+  <figure class="card figure">
+    <img src="../../icons/sisyphus.jpg" alt="A pixel-art illustration of Sisyphus pushing his boulder up a hill" />
+    <figcaption>Sisyphus, pushing something up a hill.</figcaption>
+  </figure> -->
+
+  <section class="card">
+    <p>
+      I've only recently started to read and use philosophy in my everyday life, but the formulation of
+      philosophical ideas and how to use them has firmly implanted itself in my psyche. After reading Frankl, I see
+      the benefit of existentialism. Essentially, people can withstand any hardship with a strong enough why. I've
+      also read Carl Sagan, and his large toolkit for how to not let people trick you with fantastic claims. The
+      two authors espouse ideas that don't work with one another. You can't both agree that things happen for a
+      purpose (Teleological Causation) and that things don't happen for a purpose, so you must look for the real
+      cause or reason that a thing happened when a fantastic claim is made (Mechanistic Causation).
+    </p>
+    <p>
+      Faced with this problem, an LLM suggested I read Camus. Camus reframes the problem as not a paradox, but
+      instead a starting point. If you accept that people yearn for meaning and the world fails to give you
+      meaning, you can choose to rebel against the world's truth and apply meaning in your own life when
+      appropriate. The sentiment has an appeal, but in practice, the call to action feels more cerebral than
+      useful. A Christian can accept that bad things happen for a reason. The bad things are leading to a higher
+      purpose, so the Christian can maintain optimism not only in spite of hardship, but because of it. An
+      absurdist must accept hardship with grit, and choose to fight on.
+    </p>
+    <p>
+      I think this adds meaning to the story of Job that I never saw before. You can take the story as a narrator
+      in a god-like position explaining how to keep a person happy and functioning to the breaking point with zero
+      input from you. Essentially armed with monotheistic indoctrination, the person will be a useful member of
+      society through just about infinite hardship. The story is a strong pitch to governments to allow their
+      citizens to adopt religion.
+    </p>
+    <p>
+      But what do you do if you aren't Job and you aren't Sisyphus? I don't have infinite optimism based on
+      existentialism, and I don't have infinite grit. In real life practice, I think the answer is in thinking
+      about life in two scopes. First, the snowball method, as evangelized by Dave Ramsey, has such huge
+      psychological benefits, that I think it is the right starting point.
+    </p>
+    <p>
+      Rather than pushing a boulder up a hill, imagine pushing a snowball up a hill. This is doable. So you do it,
+      and the snowball collects a little more snow, and it becomes the size of a watermelon. As you push the
+      snowball up the hill, it continues to get bigger, but you continue to get stronger, or learn small tricks, or
+      develop a network of people helping you push the snow boulder up the hill. This is the first step in my
+      philosophy.
+    </p>
+    <p>
+      The second step is learning that the hill is finite. I'm not referring to death; I'm referring to actual
+      challenges in life. From the ages 5 to about 22, I think my identity was based on doing well in school. This
+      isn't a bad thing, but at some point that ended. My identity didn't reform around something else. I continue
+      to think of myself as someone who does well on tests of aptitude and skill. But that hill has been
+      surmounted, and it is not who I am anymore. Even though I am back in school at 40, it feels like a very small
+      part of who I am. The crucible of academic rigor has no effect once a person's identity has already been
+      fired in the kiln once.
+    </p>
+    <p>
+      So what do I do with this information? Am I frozen in time, never to grow or experience optimism again? No,
+      this is not the end. I think at this point, the goal is to choose challenges that help me understand the
+      world better. The third step in my philosophy is thus to recognize that there are many hills and challenges
+      to conquer, and then pick amongst these hills/challenges, and do them to completion.
+    </p>
+    <p>
+      This is a kind of existentialism because it is building your life and identity around a collection of finite
+      challenges. Each of those individual challenges has little to no meaning by themselves, but small incremental
+      progress against the collection of challenges is rewarding. The optimism comes from realising that you can
+      make progress. The growth comes from the progress itself.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Comments</h2>
+    <a id="reply" class="reply-link" href="#" target="_blank" rel="noopener">Reply on the Fediverse →</a>
+    <div id="comments">
+      <p class="comments-loading">Loading comments…</p>
+    </div>
+    <p id="error" class="comment-error"></p>
+  </section>
+</main>
+
+<script>
+        const id = "DUMMY_ID_REPLACE_ME";
+	document.getElementById("reply").href =`https://theforkiverse.com/@dmillerfork/${id}`
+</script>
+<script src="../../scripts/fedicomments.js"></script>
+
+</body>
+</html>

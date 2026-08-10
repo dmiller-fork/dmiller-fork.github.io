@@ -230,6 +230,16 @@
 
   .item .tile img { width: 36px; height: 36px; object-fit: contain; }
 
+  /* sisyphus.jpg has a lot of dead-white margin on its right side --
+     crop in on the figure instead of shrinking the whole frame down */
+  .item.sisyphus .tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 45% 40%;
+    border-radius: 8px;
+  }
+
   .item .name { font-size: 0.8rem; }
 
   /* ---- filtering: hide items that don't match the checked building ---- */
@@ -375,9 +385,9 @@
       <span class="name">Project Six</span>
     </a>
 
-    <a class="item" data-category="tower" href="#">
-      <span class="tile"><img src="icons/apps/program-7.png" alt=""></span>
-      <span class="name">Project Seven</span>
+    <a class="item sisyphus" data-category="tower" href="essays/myphilosophy/index.html">
+      <span class="tile"><img src="icons/sisyphus.jpg" alt=""></span>
+      <span class="name">My Philosophy</span>
     </a>
 
     <a class="item" data-category="tower" href="#">

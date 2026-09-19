@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nebula · My Village</title>
+<style>
+
+  /* palette lifted straight from the village homepage, so this page
+     reads as one of its buildings rather than a separate site */
+  :root {
+    --sky: #eef4e6;
+    --hill: #b9cf8a;
+    --hill-dark: #9db86a;
+    --card-border: #8a9a5b;
+    --ink: #3a3226;
+    --ink-bg: #fffdf8;
+    --accent: #b5541f;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+    background: var(--sky);
+    color: var(--ink);
+  }
+
+  .back {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    z-index: 10;
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    background: var(--ink-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 999px;
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: bold;
+  }
+
+  /* ---------- hero ---------- */
+
+  .hero {
+    position: relative;
+    padding-top: 3rem;
+  }
+
+  .hero-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 1.5rem 3.5rem;
+    text-align: center;
+  }
+
+  .icon-circle {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 1rem;
+    background: var(--ink-bg);
+    border: 2px solid var(--card-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.08);
+  }
+
+  .hero h1 { margin: 0 0 0.4rem; }
+  .hero p.tagline { margin: 0 0 1.25rem; opacity: 0.7; }
+  .hero p.byline { margin: 0 0 1.25rem; font-size: 0.85rem; opacity: 0.6; }
+
+  .github-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--ink-bg);
+    background: var(--accent);
+    border: none;
+    border-radius: 999px;
+    padding: 0.6rem 1.4rem;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
+  }
+
+  .github-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.15);
+  }
+
+  .hills-divider svg {
+    display: block;
+    width: 100%;
+    height: 70px;
+  }
+  .hills-divider .hill { fill: var(--hill); }
+  .hills-divider .hill.back { fill: var(--hill-dark); opacity: 0.6; }
+
+  /* ---------- content ---------- */
+
+  main {
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+    background: var(--hill);
+    margin-top: -2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+  }
+
+  main > * + * { margin-top: 1.5rem; }
+
+  .card {
+    width: 100%;
+    max-width: 700px;
+    background: var(--ink-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.08);
+  }
+
+  .card:first-of-type { margin-top: -3rem; position: relative; }
+
+  .card h2 { margin-top: 0; }
+  .card h3 { margin-bottom: 0.4rem; }
+  .card p { line-height: 1.6; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul, .card ol { line-height: 1.8; }
+  .card ul:last-child, .card ol:last-child { margin-bottom: 0; }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.75rem 0 0;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    font-weight: bold;
+    background: var(--sky);
+    border: 1px solid var(--card-border);
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+  }
+
+  /* code / terminal style blocks, matching the monospace #output
+     styling used on the other project pages */
+  .code {
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 0.85rem;
+    background: var(--sky);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.5;
+    margin: 0.75rem 0;
+  }
+
+  .code:last-child { margin-bottom: 0; }
+
+  /* ---------- pipeline stepper ---------- */
+
+  .pipeline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 1rem 0 0;
+  }
+
+  .pipeline .step {
+    background: var(--sky);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.85rem;
+    font-weight: bold;
+  }
+
+  .pipeline .arrow {
+    opacity: 0.5;
+    font-size: 1rem;
+  }
+
+  /* ---------- image grids ---------- */
+
+  .img-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  figure img {
+    width: 100%;
+    display: block;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  figcaption {
+    font-size: 0.78rem;
+    opacity: 0.7;
+    text-align: center;
+    margin-top: 0.4rem;
+  }
+
+  /* ---------- team ---------- */
+
+  .team {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .team .person {
+    background: var(--sky);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+  }
+
+  .team .person strong { display: block; margin-bottom: 0.3rem; }
+  .team .person ul { margin: 0; padding-left: 1.1rem; font-size: 0.9rem; line-height: 1.6; }
+
+  footer {
+    text-align: center;
+    padding: 1.5rem 1rem 3rem;
+    font-size: 0.8rem;
+    opacity: 0.6;
+  }
+
+</style>
+</head>
+<body>
+
+<a class="back" href="../../index.html">← Back to Village</a>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="icon-circle">
+      <svg width="40" height="40" viewBox="0 0 36 36" fill="none">
+        <circle cx="15" cy="15" r="10" stroke="var(--accent)" stroke-width="3" fill="none"/>
+        <line x1="22.5" y1="22.5" x2="31" y2="31" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1>Nebula</h1>
+    <p class="tagline">A search engine built from scratch: inverted index, TF&#8209;IDF ranking, trie autocomplete, and heap-based top&#8209;k retrieval over a corpus of Project&nbsp;Gutenberg books</p>
+    <p class="byline">Daniel Miller &amp; Mert Tuncer — CMPE 180A course project</p>
+    <a class="github-btn" href="https://github.com/dmiller-fork/nebula" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+      View on GitHub
+    </a>
+  </div>
+
+  <div class="hills-divider">
+    <svg viewBox="0 0 1000 100" preserveAspectRatio="none">
+      <path class="hill back" d="M0,50 C180,90 340,20 520,50 C700,80 860,20 1000,45 V100 H0 Z"/>
+      <path class="hill" d="M0,65 C200,95 380,55 560,70 C740,85 880,55 1000,65 V100 H0 Z"/>
+    </svg>
+  </div>
+</div>
+
+<main>
+
+  <section class="card">
+    <h2>What is Nebula?</h2>
+    <p>
+      Nebula is a text search engine, written from the ground up in Python with no external search
+      libraries. Given a corpus of books pulled from Project Gutenberg, it builds an inverted index
+      and a trie, then answers free-text queries by ranking documents with TF&#8209;IDF and returning
+      the top-k matches — each with a keyword-centered snippet pulled straight from the source text.
+    </p>
+    <p>
+      It started as a course project built around a specific set of data structures, and grew into a
+      small case study on how those textbook structures behave once real (messy, unicode-laden,
+      inconsistently-punctuated) text gets thrown at them.
+    </p>
+    <div class="tag-row">
+      <span class="tag">hash maps</span>
+      <span class="tag">tries</span>
+      <span class="tag">heaps</span>
+      <span class="tag">sets</span>
+      <span class="tag">strings</span>
+      <span class="tag">TF-IDF</span>
+      <span class="tag">Python</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Pipeline</h2>
+    <p>The pipeline runs in two stages: building the inverted index and processing queries:</p>
+    <div class="pipeline">
+      <span class="step">Corpus intake</span><span class="arrow">→</span>
+      <span class="step">Tokenize</span><span class="arrow">→</span>
+      <span class="step">Inverted index + trie</span></div><div class="pipeline">
+      <span class="step">Parse query</span><span class="arrow">→</span>
+      <span class="step">TF-IDF score</span><span class="arrow">→</span>
+      <span class="step">Heap top-k</span><span class="arrow">→</span>
+      <span class="step">Snippet extraction</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>The inverted index</h2>
+    <p>
+      Instead of storing <em>document → words</em>, Nebula stores <em>word → documents that contain
+      it</em>, which is what makes "find every book containing <code>python</code>" fast instead of a
+      linear scan of the whole library. Concretely, it's a dictionary of dictionaries:
+    </p>
+    <div class="code">self.index = defaultdict(lambda: defaultdict(int))
+
+"treasure" → {
+    ("84", 935): 1,
+    ("84", 3845): 1,
+    ("1342", 210): 2,
+}</div>
+    <p>
+      The inner key is a <code>(document, position)</code> tuple — tuples are hashable, so they work
+      as dictionary keys, and bundling doc + position into one key means a single lookup gives both
+      "which book" and "where in the book" at once. The outer <code>defaultdict</code> is built with
+      a lambda so a brand-new word can be inserted with <code>index[word][(doc, pos)] += 1</code> and
+      never needs an explicit initialization branch.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Query syntax</h2>
+    <p>
+      A query is just words, but two trailing characters change how a word is treated — a small parser
+      (<code>ParseQuery</code>) splits every term into either a <strong>filter word</strong>, an
+      <strong>expansion word</strong>, or a plain query/snippet word:
+    </p>
+    <div class="code">nebula&gt; treasure! bone$ pirates
+
+full query:     treasure bones bony boney pirates
+snippet_terms:  bones bony boney pirates</div>
+    <ul>
+      <li><code>word!</code> — a <strong>filter</strong> term: it narrows which documents match, but is
+        excluded from the returned snippet windows.</li>
+      <li><code>word$</code> — an <strong>expansion</strong> term: the trie is walked to find every
+        indexed word sharing that stem/prefix, and all of them are folded into the query.</li>
+      <li>everything else counts toward both scoring and snippet placement.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>TF&#8209;IDF ranking</h2>
+    <div class="code">TF  = (count of query_term in this document) / (total words in this document)
+
+IDF = log( (total documents) / (documents containing query_term) )</div>
+    <p>
+      TF is the <strong>local</strong> signal — how much this particular document is "about" the
+      term. IDF is the <strong>global</strong> signal — how rare, and therefore how discriminating,
+      the term is across the whole corpus. A document's score for a query is the sum of
+      <code>TF × IDF</code> across every query term.
+    </p>
+    <p>
+      Two constants get pre-computed up front — total document count for IDF, and each document's
+      total word count for TF — so that scoring a query only has to compute the parts that actually
+      depend on the query itself. If a term's TF is zero for a document, its IDF is never even
+      calculated.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Heap-ranked top-k</h2>
+    <p>
+      Once every candidate document has a score, only the top <code>k</code> are needed — so rather
+      than sorting the entire result set, Nebula keeps a size-<code>k</code> min-heap and pushes
+      candidates through it, discarding the lowest score whenever the heap overflows. In theory that's
+      an <code>O(n log k)</code> win over an <code>O(n log n)</code> full sort whenever
+      <code>k ≪ n</code>. Benchmarking it against Python's built-in sort confirmed the crossover:
+    </p>
+    <div class="img-grid" style="grid-template-columns: minmax(0,420px); justify-content:center;">
+      <figure>
+        <img src="images/heap_vs_sort_bars.png" alt="Bar chart comparing heap and sort runtime at input sizes of 3, 30, and 1000 documents">
+        <figcaption>Heap pulls ahead of a full sort once the corpus reaches ~1000 documents.</figcaption>
+      </figure>
+    </div>
+    <p>
+      At tiny input sizes the constant overhead of maintaining a heap actually loses to a plain sort —
+      it only pays off once <code>n</code> is large enough for the asymptotic gap to matter, which
+      shows up cleanly between the 30-document and 1000-document runs above.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>A tokenization bug worth telling</h2>
+    <p>
+      Early on, a query for <code>treasure</code> and <code>Jim</code> against Treasure Island returned
+      a single hit — but <code>grep</code> found the word "treasure" five separate times in the same
+      file. The index was under-counting because words were being stored with their surrounding
+      punctuation still attached ("<code>treasure,</code>" and "<code>treasure</code>" hashed to two
+      different keys) and with inconsistent casing.
+    </p>
+    <div class="code">import string
+
+word = word.strip(string.punctuation).lower()</div>
+    <p>
+      That one-liner alone dropped the index from 24,036 entries to 15,733 — and brought the
+      "treasure" query results in line with grep. A second pass turned up leftover curly quotes
+      (<code>“</code> <code>”</code> <code>‘</code> <code>’</code>) that <code>string.punctuation</code>
+      doesn't know about, since they're Unicode, not ASCII:
+    </p>
+    <div class="code">PUNCTUATION = string.punctuation + "“”‘’"
+word = word.strip(PUNCTUATION).lower()</div>
+    <p>
+      The fix also surfaced a performance lesson: Python re-evaluates an expression like that on every
+      loop iteration, so the punctuation set needs to be built once outside the tokenizing loop, not
+      redefined on every word.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Precision &amp; recall</h2>
+    <p>
+      To check whether TF&#8209;IDF was actually earning its keep, each query was also run with
+      <strong>TF only</strong> and <strong>IDF only</strong> as ablations, and precision/recall@20 was
+      measured against a hand-labeled set of relevant documents for three different queries.
+    </p>
+    <div class="img-grid">
+      <figure>
+        <img src="images/adventure_query_chart.png" alt="Bar chart of precision and recall at 20 for the adventure query, comparing TF-IDF, TF only, and IDF only">
+        <figcaption>Adventure query (5 terms, 130 relevant docs)</figcaption>
+      </figure>
+      <figure>
+        <img src="images/scifi_bars.png" alt="Bar chart of precision and recall at 20 for the science fiction query, comparing TF-IDF, TF only, and IDF only">
+        <figcaption>Sci-fi query (5 terms, 33 relevant docs)</figcaption>
+      </figure>
+      <figure>
+        <img src="images/treasure_island_bars.png" alt="Bar chart of precision and recall at 20 for the Treasure Island query, comparing TF-IDF, TF only, and IDF only">
+        <figcaption>Treasure Island query (4 terms, 1 relevant doc)</figcaption>
+      </figure>
+    </div>
+    <p>
+      IDF alone consistently underperforms — on the sci-fi query it returns zero relevant documents in
+      the top 20. That makes sense: IDF only measures how rare a term is corpus-wide, with no regard
+      for whether the term actually shows up often in a given document, so it happily ranks documents
+      that mention a rare word exactly once above documents that are genuinely about the topic.
+      TF&#8209;IDF and TF-only land close together across all three queries, which suggests that for
+      this corpus and these queries, term frequency is doing most of the ranking work, with IDF mainly
+      acting as a tie-breaker.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>What's next</h2>
+    <ul>
+      <li>Persist the built index to disk — right now it's rebuilt from scratch on every run, which is
+        the main bottleneck at larger corpus sizes (~5–30 minutes to index 1000 books).</li>
+      <li>Scale from ~1000 books toward the full ~80,000-book Gutenberg catalog, which will need the
+        index-persistence work above to be usable.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  Built for CMPE 180A · corpus sourced from <a href="https://www.gutenberg.org/" target="_blank" rel="noopener" style="color:inherit;">Project Gutenberg</a>
+</footer>
+
+</body>
+</html>

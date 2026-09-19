@@ -230,16 +230,6 @@
 
   .item .tile img { width: 36px; height: 36px; object-fit: contain; }
 
-  /* sisyphus.jpg has a lot of dead-white margin on its right side --
-     crop in on the figure instead of shrinking the whole frame down */
- /* .item.sisyphus .tile img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 45% 40%;
-    border-radius: 8px;
-  } */
-
   .item .name { font-size: 0.8rem; }
 
   /* ---- filtering: hide items that don't match the checked building ---- */
@@ -303,22 +293,22 @@
 
   <label class="building" for="filter-stonehenge" style="left:18%; top:47%;">
     <span class="icon"><img src="icons/stonehenge.png" alt=""></span>
-    <span class="label">Stonehenge</span>
+    <span class="label">C projects</span>
   </label>
 
   <label class="building" for="filter-tree" style="left:42%; top:66%;">
     <span class="icon"><img src="icons/tree.png" alt=""></span>
-    <span class="label">Tree</span>
+    <span class="label">Python Projects</span>
   </label>
 
   <label class="building" for="filter-watermill" style="left:83%; top:37%;">
     <span class="icon"><img src="icons/watermill.jpg" alt=""></span>
-    <span class="label">Watermill</span>
+    <span class="label">Writings</span>
   </label>
 
   <label class="building" for="filter-tower" style="left:60%; top:89%;">
     <span class="icon"><img src="icons/tower.gif" alt=""></span>
-    <span class="label">Tower</span>
+    <span class="label">Research</span>
   </label>
 
 </div>
@@ -327,7 +317,7 @@
      data-category ties it to a building above -- that's the only
      connection between the two; add/remove items freely. -->
 <section id="apps">
-  <h2>Programs &amp; Essays</h2>
+  <h2>Projects</h2>
   <label class="filter-all" for="filter-all">Show All</label>
 
   <div class="grid">
@@ -350,7 +340,7 @@
       <span class="name">Fediblog</span>
     </a>
 
-    <a class="item" data-category="tree" href="apps/libjsonl/index.html">
+    <a class="item" data-category="stonehenge" href="apps/libjsonl/index.html">
       <span class="tile">
         <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
           <path d="M13 4c-3 0-5 2-5 5v6c0 2-1 3-3 3 2 0 3 1 3 3v6c0 3 2 5 5 5" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" fill="none"/>
@@ -360,7 +350,7 @@
       <span class="name">Libjsonl</span>
     </a>
 
-    <a class="item" data-category="tree" href="apps/libmd/index.html">
+    <a class="item" data-category="stonehenge" href="apps/libmd/index.html">
       <span class="tile">
         <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
           <path d="M8 3h14l8 8v20a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="var(--accent)"/>
@@ -370,7 +360,7 @@
       <span class="name">Libmd</span>
     </a>
 
-    <a class="item" data-category="watermill" href="apps/libsvg/index.html">
+    <a class="item" data-category="stonehenge" href="apps/libsvg/index.html">
       <span class="tile">
         <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
           <path d="M18 4 24 14h-4l6 8h-5l6 10H11l6-10h-5l6-8h-4Z" fill="var(--accent)"/>
@@ -380,12 +370,19 @@
       <span class="name">Libsvg</span>
     </a>
 
-    <a class="item" data-category="watermill" href="#">
-      <span class="tile"><img src="icons/apps/program-6.png" alt=""></span>
-      <span class="name">Project Six</span>
+    <a class="item" data-category="tree" href="apps/nebula/index.html">
+      <span class="tile">
+
+
+      <svg width="40" height="40" viewBox="0 0 36 36" fill="none">
+        <circle cx="15" cy="15" r="10" stroke="var(--accent)" stroke-width="3"  fill="none"/>
+        <line x1="22.5" y1="22.5" x2="31" y2="31" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+</span>
+      <span class="name">Nebula</span>
     </a>
 
-    <a class="item sisyphus" data-category="tower" href="essays/myphilosophy/index.html">
+    <a class="item sisyphus" data-category="watermill" href="essays/myphilosophy/index.html">
       <span class="tile"><img src="icons/sisyphus.jpg" alt=""></span>
       <span class="name">My Philosophy</span>
     </a>

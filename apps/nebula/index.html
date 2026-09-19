@@ -435,8 +435,7 @@ word = word.strip(PUNCTUATION).lower()</div>
     <h2>Precision &amp; recall</h2>
     <p>
       To check whether TF&#8209;IDF was actually earning its keep, each query was also run with
-      <strong>TF only</strong> and <strong>IDF only</strong> as ablations, and precision/recall@20 was
-      measured against a hand-labeled set of relevant documents for three different queries.
+      <strong>TF only</strong> and <strong>IDF only</strong> as an ablation study. Precision/recall@20 was measured against metadata in the Project Gutenberg corpus that defines books as part of "bookshelves" with labels such as "adventure" and "science fiction".
     </p>
     <div class="img-grid">
       <figure>
@@ -448,19 +447,17 @@ word = word.strip(PUNCTUATION).lower()</div>
         <figcaption>Sci-fi query (5 terms, 33 relevant docs)</figcaption>
       </figure>
       <figure>
-        <img src="images/treasure_island_bars.png" alt="Bar chart of precision and recall at 20 for the Treasure Island query, comparing TF-IDF, TF only, and IDF only">
+        <img src="images/treasureisland_bars.png" alt="Bar chart of precision and recall at 20 for the Treasure Island query, comparing TF-IDF, TF only, and IDF only">
         <figcaption>Treasure Island query (4 terms, 1 relevant doc)</figcaption>
       </figure>
     </div>
     <p>
-      IDF alone consistently underperforms — on the sci-fi query it returns zero relevant documents in
-      the top 20. That makes sense: IDF only measures how rare a term is corpus-wide, with no regard
-      for whether the term actually shows up often in a given document, so it happily ranks documents
-      that mention a rare word exactly once above documents that are genuinely about the topic.
-      TF&#8209;IDF and TF-only land close together across all three queries, which suggests that for
-      this corpus and these queries, term frequency is doing most of the ranking work, with IDF mainly
-      acting as a tie-breaker.
+		Recall and Precision are metrics for testing how well your query engine returns relevant results. Precision tells you the number of relevant results returned out of the total number of results returned by the engine. In these examples, 20 results are always returned, so precision is always some value out of 20. Recall is the number of relevant results returned out of the total number of relevant results in the dataset. In these examples:<ul><li>The adventure query had 130 possible relevant results in the 964 document dataset.</li><li>The science fiction query had 33 possible relevant results in the 964 document dataset.</li><li>The treasure island query had 1 possible relevant result in the 964 document dataset.</li></ul>
     </p>
+	<p>
+		The adventure query was five terms: “treasure voyage adventure pirates swords”, which are very common words so the term-frequency calculation outperformed the other two metrics. The science fiction query was also five terms: “spaceship future technology alien planet”, which are also very common words, so term frequency was again the best ranking calculation, with TF-IDF only slightly worse. The Treasure Island query was 4 words with less common words: “voyage yo-ho-ho travel weapons”. In particular, "yo-ho-ho" is only found in Treasure Island, and "weapons" is only in Treasure Island one time. In this case, the inverse document frequency was able to find the relevant document, but the term frequency calculation was not. These three queries together show why term frequency multiplied by inverse document frequency is a good calculation in both situations, for common query terms and uncommon query terms. </p>
+
+
   </section>
 
   <section class="card">
